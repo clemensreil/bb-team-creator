@@ -1,11 +1,34 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  return (
+    <Config>
+      <TreasuryInput />
+    </Config>
+  );
+}
 
-  return <div className="text-6xl"> Hallo </div>;
+type ConfigProps = {
+  children: React.ReactNode;
+};
+
+function Config({ children }: ConfigProps) {
+  return <div>{children}</div>;
+}
+
+function TreasuryInput() {
+  return (
+    <>
+      <label htmlFor="treasury">Treasury Value</label>
+      <input
+        type="text"
+        id="treasury"
+        className="shadow appearance-none border rounded py-2 px-3"
+      ></input>
+    </>
+  );
 }
 
 export default App;
