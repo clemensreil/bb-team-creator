@@ -6,11 +6,11 @@ function App() {
   const [treasury, setTreasury] = useState("1000000");
   const [coachName, setCoachName] = useState("");
   const [teamName, setTeamName] = useState("");
-  const [race, setRace] = useState("Amazons");
+  const [race, setRace] = useState("Amazons"); // needs to change to array of races
   const [nafNumber, setNafNumber] = useState("");
 
   return (
-    <div>
+    <div className="">
       <HeaderConfigPanel
         treasury={treasury}
         setTreasury={setTreasury}
@@ -22,12 +22,149 @@ function App() {
         setNafNumber={setNafNumber}
         setRace={setRace}
       />
+      <PlayerTable race={race} /> //needs to change to array of races
     </div>
   );
 }
 
-type ConfigProps = {
-  children: React.ReactNode;
-};
+interface Player {
+  position: string;
+  name: string;
+  skill1: string;
+  skill2: string;
+}
 
+interface PlayerPosition {
+  positon: string;
+  maxAllowed: number;
+  count: number;
+  MA: string;
+  ST: string;
+  AG: string;
+  PA: string;
+  AV: string;
+  skills: [""];
+  primaryAccess: [""];
+  secondaryAccess: [""];
+  price: number;
+}
+
+interface Race {
+  name: string;
+  specialRules: [""];
+  reRolls: number;
+  apo: boolean;
+  positions: Array<PlayerPosition>;
+}
+
+interface Roster {
+  players: Array<Player>;
+}
+
+function PlayerTable(race: Race) {
+  //use initial race.positions
+  //create Array of players
+  const [playerPositions, setPlayerPositions] = useState([
+    {
+      positon: "Lineman",
+      maxAllowed: 16,
+      count: 0,
+      MA: "6",
+      ST: "3",
+      AG: "2+",
+      PA: "4+",
+      AV: "9+",
+      skills: ["None"],
+      primaryAccess: ["G", "A"],
+      secondaryAccess: ["S", "P"],
+      price: 70000,
+    },
+    {
+      positon: "Blitzer",
+      maxAllowed: 2,
+      count: 0,
+      MA: "7",
+      ST: "3",
+      AG: "2+",
+      PA: "4+",
+      AV: "9+",
+      skills: ["Block"],
+      primaryAccess: ["G", "A"],
+      secondaryAccess: ["S", "P"],
+      price: 100000,
+    },
+    {
+      positon: "Catcher",
+      maxAllowed: 4,
+      count: 0,
+      MA: "8",
+      ST: "3",
+      AG: "2+",
+      PA: "4+",
+      AV: "8+",
+      skills: ["Catch"],
+      primaryAccess: ["G", "A"],
+      secondaryAccess: ["S"],
+      price: 90000,
+    },
+    {
+      positon: "Thrower",
+      maxAllowed: 2,
+      count: 0,
+      MA: "6",
+      ST: "3",
+      AG: "2+",
+      PA: "4+",
+      AV: "9+",
+      skills: ["Cloud Burster", "Pass", "Safe Pass"],
+      primaryAccess: ["G", "A", "P"],
+      secondaryAccess: ["S"],
+      price: 100000,
+    },
+  ]);
+
+  return (
+    <>
+      <table>
+        <tr>
+          <th>No.1</th>
+          <th>Player Name</th>
+          <th>Position</th>
+          <th>MA</th>
+          <th>ST</th>
+          <th>AG</th>
+          <th>PA</th>
+          <th>AV</th>
+          <th>Skills</th>
+          <th>Skill 1</th>
+          <th>Skill 2</th>
+          <th>Cost</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>
+            <input type="text" />
+          </td>
+          <td>
+            <select name="position" id="position">
+              <option value="lineman">Lineman</option>
+              <option value="catcher">Catcher</option>
+              <option value="blitzer">Blitzer</option>
+              <option value="thrower">Thrower</option>
+            </select>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </>
+  );
+}
 export default App;
