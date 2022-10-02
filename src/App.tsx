@@ -1,12 +1,77 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, ReactPropTypes, useState } from "react";
 import HeaderConfigPanel from "./HeaderConfigPanel";
+import { Race, PlayerPosition, Player } from "./interfaces";
+
 import "./App.css";
 
 function App() {
   const [treasury, setTreasury] = useState("1000000");
   const [coachName, setCoachName] = useState("");
   const [teamName, setTeamName] = useState("");
-  const [race, setRace] = useState("Amazons"); // needs to change to array of races
+  const [race, setRace] = useState<Race>({
+    name: "High Elves",
+    specialRules: ["Elven Kingdoms League"],
+    reRolls: 50000,
+    apo: true,
+    positions: [
+      {
+        position: "Lineman",
+        maxAllowed: 16,
+        count: 0,
+        MA: "6",
+        ST: "3",
+        AG: "2+",
+        PA: "4+",
+        AV: "9+",
+        skills: ["None"],
+        primaryAccess: ["G", "A"],
+        secondaryAccess: ["S", "P"],
+        price: 70000,
+      },
+      {
+        position: "Blitzer",
+        maxAllowed: 2,
+        count: 0,
+        MA: "7",
+        ST: "3",
+        AG: "2+",
+        PA: "4+",
+        AV: "9+",
+        skills: ["Block"],
+        primaryAccess: ["G", "A"],
+        secondaryAccess: ["S", "P"],
+        price: 100000,
+      },
+      {
+        position: "Catcher",
+        maxAllowed: 4,
+        count: 0,
+        MA: "8",
+        ST: "3",
+        AG: "2+",
+        PA: "4+",
+        AV: "8+",
+        skills: ["Catch"],
+        primaryAccess: ["G", "A"],
+        secondaryAccess: ["S"],
+        price: 90000,
+      },
+      {
+        position: "Thrower",
+        maxAllowed: 2,
+        count: 0,
+        MA: "6",
+        ST: "3",
+        AG: "2+",
+        PA: "4+",
+        AV: "9+",
+        skills: ["Cloud Burster", "Pass", "Safe Pass"],
+        primaryAccess: ["G", "A", "P"],
+        secondaryAccess: ["S"],
+        price: 100000,
+      },
+    ],
+  }); // needs to change to array of races
   const [nafNumber, setNafNumber] = useState("");
 
   return (
@@ -22,105 +87,16 @@ function App() {
         setNafNumber={setNafNumber}
         setRace={setRace}
       />
-      <PlayerTable race={race} /> //needs to change to array of races
+      <PlayerTable race={race} />
     </div>
   );
 }
 
-interface Player {
-  position: string;
-  name: string;
-  skill1: string;
-  skill2: string;
-}
-
-interface PlayerPosition {
-  positon: string;
-  maxAllowed: number;
-  count: number;
-  MA: string;
-  ST: string;
-  AG: string;
-  PA: string;
-  AV: string;
-  skills: [""];
-  primaryAccess: [""];
-  secondaryAccess: [""];
-  price: number;
-}
-
-interface Race {
-  name: string;
-  specialRules: [""];
-  reRolls: number;
-  apo: boolean;
-  positions: Array<PlayerPosition>;
-}
-
-interface Roster {
-  players: Array<Player>;
-}
-
-function PlayerTable(race: Race) {
+function PlayerTable({ race }: { race: Race }) {
   //use initial race.positions
   //create Array of players
-  const [playerPositions, setPlayerPositions] = useState([
-    {
-      positon: "Lineman",
-      maxAllowed: 16,
-      count: 0,
-      MA: "6",
-      ST: "3",
-      AG: "2+",
-      PA: "4+",
-      AV: "9+",
-      skills: ["None"],
-      primaryAccess: ["G", "A"],
-      secondaryAccess: ["S", "P"],
-      price: 70000,
-    },
-    {
-      positon: "Blitzer",
-      maxAllowed: 2,
-      count: 0,
-      MA: "7",
-      ST: "3",
-      AG: "2+",
-      PA: "4+",
-      AV: "9+",
-      skills: ["Block"],
-      primaryAccess: ["G", "A"],
-      secondaryAccess: ["S", "P"],
-      price: 100000,
-    },
-    {
-      positon: "Catcher",
-      maxAllowed: 4,
-      count: 0,
-      MA: "8",
-      ST: "3",
-      AG: "2+",
-      PA: "4+",
-      AV: "8+",
-      skills: ["Catch"],
-      primaryAccess: ["G", "A"],
-      secondaryAccess: ["S"],
-      price: 90000,
-    },
-    {
-      positon: "Thrower",
-      maxAllowed: 2,
-      count: 0,
-      MA: "6",
-      ST: "3",
-      AG: "2+",
-      PA: "4+",
-      AV: "9+",
-      skills: ["Cloud Burster", "Pass", "Safe Pass"],
-      primaryAccess: ["G", "A", "P"],
-      secondaryAccess: ["S"],
-      price: 100000,
-    },
+  const [playerPositions, setPlayerPositions] = useState<PlayerPosition[]>([
+    ...race.positions,
   ]);
 
   return (

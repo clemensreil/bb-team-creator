@@ -1,4 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { Race } from "./interfaces";
 
 type HeaderConfigPanelProps = {
   treasury: string;
@@ -9,7 +10,7 @@ type HeaderConfigPanelProps = {
   setTeamName: Dispatch<SetStateAction<string>>;
   nafNumber: string;
   setNafNumber: Dispatch<SetStateAction<string>>;
-  setRace: Dispatch<SetStateAction<string>>;
+  setRace: Dispatch<SetStateAction<Race>>;
 };
 
 export default function HeaderConfigPanel({
@@ -85,12 +86,12 @@ function TextInput({
 }
 
 type RaceDropdown = {
-  setRace: Dispatch<SetStateAction<string>>;
+  setRace: Dispatch<SetStateAction<Race>>;
 };
 
 function RaceDropdown({ setRace }: RaceDropdown) {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setRace(event.target.value);
+    //setRace(event.target.value);
   };
 
   return (
