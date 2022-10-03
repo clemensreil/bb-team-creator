@@ -94,11 +94,27 @@ function App() {
 
 function PlayerTable({ race }: { race: Race }) {
   //use initial race.positions
-  //create Array of players
-  const [playerPositions, setPlayerPositions] = useState<PlayerPosition[]>([
-    ...race.positions,
-  ]);
+  const [positions, setPostions] = useState(race.positions);
 
+  //create Array of players
+  const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    // set Position of Player
+    // add count of selected current position
+    console.log(event);
+    setPostions(
+      positions.map((position) => {
+        if (position.position === event.target.value) {
+          return {
+            ...position,
+            count: position.count + 1,
+          };
+        } else {
+          return position;
+        }
+      })
+    );
+  };
+  console.log(positions);
   return (
     <>
       <table>
@@ -122,11 +138,16 @@ function PlayerTable({ race }: { race: Race }) {
             <input type="text" />
           </td>
           <td>
-            <select name="position" id="position">
-              <option value="lineman">Lineman</option>
-              <option value="catcher">Catcher</option>
-              <option value="blitzer">Blitzer</option>
-              <option value="thrower">Thrower</option>
+            <select name="position" id="position" onChange={handlePosChange}>
+              {positions.map((playerPos) => {
+                if (playerPos.count < playerPos.maxAllowed) {
+                  return (
+                    <option key={playerPos.position} value={playerPos.position}>
+                      {playerPos.position}
+                    </option>
+                  );
+                }
+              })}
             </select>
           </td>
           <td></td>
