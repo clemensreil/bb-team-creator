@@ -1,7 +1,7 @@
 import { ChangeEvent, ReactPropTypes, useState } from "react";
 import HeaderConfigPanel from "./HeaderConfigPanel";
 import { Race, PlayerPosition, Player } from "./interfaces";
-
+import { PlayerRoster } from "./data";
 import "./App.css";
 
 function App() {
@@ -95,10 +95,13 @@ function App() {
 function PlayerTable({ race }: { race: Race }) {
   //use initial race.positions
   const [positions, setPostions] = useState(race.positions);
+  const [playerRoster, setPlayerRoster] = useState(PlayerRoster);
 
-  //create Array of players
   const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    // set Position of Player
+    // set Position of Player, pass in the player somehow
+    setPlayerRoster(new Map(playerRoster.set("1", {})));
+    console.log(playerRoster.get("1"));
+
     // add count of selected current position
     console.log(event);
     setPostions(
