@@ -99,8 +99,17 @@ function PlayerTable({ race }: { race: Race }) {
 
   const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
     // set Position of Player, pass in the player somehow
-    setPlayerRoster(new Map(playerRoster.set("1", {})));
-    console.log(playerRoster.get("1"));
+    const selectedPlayer: Player | undefined = playerRoster.get("1");
+    console.log({ ...selectedPlayer });
+    setPlayerRoster(
+      new Map(
+        playerRoster.set("1", {
+          ...selectedPlayer!,
+          position: event.target.value,
+        })
+      )
+    );
+    console.log(playerRoster);
 
     // add count of selected current position
     console.log(event);
@@ -110,6 +119,11 @@ function PlayerTable({ race }: { race: Race }) {
           return {
             ...position,
             count: position.count + 1,
+          };
+        } else if (position.position === selectedPlayer!.position) {
+          return {
+            ...position,
+            count: position.count - 1,
           };
         } else {
           return position;

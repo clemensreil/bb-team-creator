@@ -21,7 +21,7 @@ interface PlayerPosition {
   price: number;
 }
 
-export interface Player {
+export interface Player extends Object {
   position: string;
   name: string;
   skill1: string;
