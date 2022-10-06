@@ -1,4 +1,10 @@
-import { ChangeEvent, ReactPropTypes, useState } from "react";
+import {
+  ChangeEvent,
+  ReactPropTypes,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import HeaderConfigPanel from "./HeaderConfigPanel";
 import { Race, PlayerPosition, Player } from "./interfaces";
 import { PlayerRoster } from "./data";
@@ -15,7 +21,21 @@ function App() {
     apo: true,
     positions: [
       {
-        position: "Lineman",
+        name: "None",
+        maxAllowed: 17,
+        count: 16,
+        MA: "-",
+        ST: "-",
+        AG: "-",
+        PA: "-",
+        AV: "-",
+        skills: ["None"],
+        primaryAccess: ["-"],
+        secondaryAccess: ["-"],
+        price: 0,
+      },
+      {
+        name: "Lineman",
         maxAllowed: 16,
         count: 0,
         MA: "6",
@@ -29,7 +49,7 @@ function App() {
         price: 70000,
       },
       {
-        position: "Blitzer",
+        name: "Blitzer",
         maxAllowed: 2,
         count: 0,
         MA: "7",
@@ -43,7 +63,7 @@ function App() {
         price: 100000,
       },
       {
-        position: "Catcher",
+        name: "Catcher",
         maxAllowed: 4,
         count: 0,
         MA: "8",
@@ -57,7 +77,7 @@ function App() {
         price: 90000,
       },
       {
-        position: "Thrower",
+        name: "Thrower",
         maxAllowed: 2,
         count: 0,
         MA: "6",
@@ -94,33 +114,79 @@ function App() {
 
 function PlayerTable({ race }: { race: Race }) {
   //use initial race.positions
-  const [positions, setPostions] = useState(race.positions);
+  const [positions, setPositions] = useState(race.positions);
   const [playerRoster, setPlayerRoster] = useState(PlayerRoster);
 
+  return (
+    <table>
+      <tr>
+        <th>No.1</th>
+        <th>Player Name</th>
+        <th>Position</th>
+        <th>MA</th>
+        <th>ST</th>
+        <th>AG</th>
+        <th>PA</th>
+        <th>AV</th>
+        <th>Skills</th>
+        <th>Skill 1</th>
+        <th>Skill 2</th>
+        <th>Price</th>
+      </tr>
+      <>
+        {playerRoster.forEach((player, key) => {
+          <PlayerTableRow
+            positions={positions}
+            setPositions={setPositions}
+            player={player}
+            key={key}
+            setPlayerRoster={setPlayerRoster}
+            playerRoster={playerRoster}
+          />;
+        })}
+      </>
+    </table>
+  );
+}
+
+function PlayerTableRow({
+  positions,
+  setPositions,
+  player,
+  key,
+  setPlayerRoster,
+  playerRoster,
+}: {
+  positions: Array<PlayerPosition>;
+  setPositions: Dispatch<SetStateAction<PlayerPosition[]>>;
+  player: Player;
+  key: string;
+  setPlayerRoster: Dispatch<SetStateAction<Map<string, Player>>>;
+  playerRoster: Map<string, Player>;
+}) {
+  const currentPlayerPos = positions.find(
+    (position) => position.name === player.position
+  );
+
   const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    // set Position of Player, pass in the player somehow
-    const selectedPlayer: Player | undefined = playerRoster.get("1");
-    console.log({ ...selectedPlayer });
+    //  pass in the player somehow -> make tr own component and pass player
     setPlayerRoster(
       new Map(
-        playerRoster.set("1", {
-          ...selectedPlayer!,
+        playerRoster.set(key, {
+          ...player!,
           position: event.target.value,
         })
       )
     );
-    console.log(playerRoster);
 
-    // add count of selected current position
-    console.log(event);
-    setPostions(
+    setPositions(
       positions.map((position) => {
-        if (position.position === event.target.value) {
+        if (position.name === event.target.value) {
           return {
             ...position,
             count: position.count + 1,
           };
-        } else if (position.position === selectedPlayer!.position) {
+        } else if (position.name === player.position) {
           return {
             ...position,
             count: position.count - 1,
@@ -131,54 +197,46 @@ function PlayerTable({ race }: { race: Race }) {
       })
     );
   };
-  console.log(positions);
+
+  const handlePlayerNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPlayerRoster(
+      new Map(
+        playerRoster.set(key, {
+          ...player!,
+          name: event.target.value,
+        })
+      )
+    );
+  };
   return (
-    <>
-      <table>
-        <tr>
-          <th>No.1</th>
-          <th>Player Name</th>
-          <th>Position</th>
-          <th>MA</th>
-          <th>ST</th>
-          <th>AG</th>
-          <th>PA</th>
-          <th>AV</th>
-          <th>Skills</th>
-          <th>Skill 1</th>
-          <th>Skill 2</th>
-          <th>Cost</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>
-            <input type="text" />
-          </td>
-          <td>
-            <select name="position" id="position" onChange={handlePosChange}>
-              {positions.map((playerPos) => {
-                if (playerPos.count < playerPos.maxAllowed) {
-                  return (
-                    <option key={playerPos.position} value={playerPos.position}>
-                      {playerPos.position}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-    </>
+    <tr>
+      <td>{key}</td>
+      <td>
+        <input type="text" onChange={handlePlayerNameChange} />
+      </td>
+      <td>
+        <select name="position" id="position" onChange={handlePosChange}>
+          {positions.map((playerPos) => {
+            if (playerPos.count < playerPos.maxAllowed) {
+              return (
+                <option key={playerPos.name} value={playerPos.name}>
+                  {playerPos.name}
+                </option>
+              );
+            }
+          })}
+        </select>
+      </td>
+      <td>{currentPlayerPos?.MA}</td>
+      <td>{currentPlayerPos?.ST}</td>
+      <td>{currentPlayerPos?.AG}</td>
+      <td>{currentPlayerPos?.PA}</td>
+      <td>{currentPlayerPos?.AV}</td>
+      <td>{currentPlayerPos?.skills}</td>
+      <td>{player.skill1}</td>
+      <td>{player.skill2}</td>
+      <td>{currentPlayerPos?.price}</td>
+    </tr>
   );
 }
 export default App;

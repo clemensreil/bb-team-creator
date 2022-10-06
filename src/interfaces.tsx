@@ -6,8 +6,8 @@ export interface Race {
   positions: Array<PlayerPosition>;
 }
 
-interface PlayerPosition {
-  position: string;
+export interface PlayerPosition {
+  name: string;
   maxAllowed: number;
   count: number;
   MA: string;
@@ -21,7 +21,7 @@ interface PlayerPosition {
   price: number;
 }
 
-export interface Player extends Object {
+export interface Player {
   position: string;
   name: string;
   skill1: string;
