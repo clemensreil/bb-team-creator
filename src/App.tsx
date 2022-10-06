@@ -32,7 +32,7 @@ function App() {
         skills: ["None"],
         primaryAccess: ["-"],
         secondaryAccess: ["-"],
-        price: 0,
+        price: 1,
       },
       {
         name: "Lineman",
