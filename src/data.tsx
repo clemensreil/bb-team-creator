@@ -5,9 +5,9 @@ export let PlayerRoster: Map<string, Player> = new Map([
     "1",
     {
       position: "None",
-      name: " ",
-      skill1: " ",
-      skill2: " ",
+      name: "",
+      skill1: "",
+      skill2: "",
     },
   ],
   [

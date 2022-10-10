@@ -32,7 +32,7 @@ function App() {
         skills: ["None"],
         primaryAccess: ["-"],
         secondaryAccess: ["-"],
-        price: 1,
+        price: 0,
       },
       {
         name: "Lineman",
@@ -93,6 +93,8 @@ function App() {
     ],
   }); // needs to change to array of races
   const [nafNumber, setNafNumber] = useState("");
+  const [positions, setPositions] = useState(race.positions);
+  const [playerRoster, setPlayerRoster] = useState(PlayerRoster);
 
   return (
     <div className="">
@@ -107,33 +109,7 @@ function App() {
         setNafNumber={setNafNumber}
         setRace={setRace}
       />
-      <PlayerTable race={race} />
-    </div>
-  );
-}
-
-function PlayerTable({ race }: { race: Race }) {
-  //use initial race.positions
-  const [positions, setPositions] = useState(race.positions);
-  const [playerRoster, setPlayerRoster] = useState(PlayerRoster);
-
-  return (
-    <table>
-      <tr>
-        <th>No.1</th>
-        <th>Player Name</th>
-        <th>Position</th>
-        <th>MA</th>
-        <th>ST</th>
-        <th>AG</th>
-        <th>PA</th>
-        <th>AV</th>
-        <th>Skills</th>
-        <th>Skill 1</th>
-        <th>Skill 2</th>
-        <th>Price</th>
-      </tr>
-      <>
+      <PlayerTable>
         {playerRoster.forEach((player, key) => {
           <PlayerTableRow
             positions={positions}
@@ -144,7 +120,33 @@ function PlayerTable({ race }: { race: Race }) {
             playerRoster={playerRoster}
           />;
         })}
-      </>
+      </PlayerTable>
+    </div>
+  );
+}
+
+function PlayerTable({ children }) {
+  //use initial race.positions
+
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <th>No.1</th>
+          <th>Player Name</th>
+          <th>Position</th>
+          <th>MA</th>
+          <th>ST</th>
+          <th>AG</th>
+          <th>PA</th>
+          <th>AV</th>
+          <th>Skills</th>
+          <th>Skill1</th>
+          <th>Skill2</th>
+          <th>Price</th>
+        </tr>
+        {children}
+      </tbody>
     </table>
   );
 }
