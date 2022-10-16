@@ -4,6 +4,7 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  ReactNode,
 } from "react";
 import HeaderConfigPanel from "./HeaderConfigPanel";
 import { Race, PlayerPosition, Player } from "./interfaces";
@@ -110,11 +111,12 @@ function App() {
         setRace={setRace}
       />
       <PlayerTable>
-        {playerRoster.forEach((player, key) => {
+        {[...playerRoster].map(([key, value]) => {
+          console.log(value, key);
           <PlayerTableRow
             positions={positions}
             setPositions={setPositions}
-            player={player}
+            player={value}
             key={key}
             setPlayerRoster={setPlayerRoster}
             playerRoster={playerRoster}
@@ -126,11 +128,9 @@ function App() {
 }
 
 function PlayerTable({ children }) {
-  //use initial race.positions
-
   return (
     <table>
-      <tbody>
+      <thead>
         <tr>
           <th>No.1</th>
           <th>Player Name</th>
@@ -145,8 +145,9 @@ function PlayerTable({ children }) {
           <th>Skill2</th>
           <th>Price</th>
         </tr>
-        {children}
-      </tbody>
+      </thead>
+
+      <tbody>{children}</tbody>
     </table>
   );
 }
@@ -166,12 +167,11 @@ function PlayerTableRow({
   setPlayerRoster: Dispatch<SetStateAction<Map<string, Player>>>;
   playerRoster: Map<string, Player>;
 }) {
-  const currentPlayerPos = positions.find(
+  let currentPlayerPos = positions.find(
     (position) => position.name === player.position
   );
 
   const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    //  pass in the player somehow -> make tr own component and pass player
     setPlayerRoster(
       new Map(
         playerRoster.set(key, {
