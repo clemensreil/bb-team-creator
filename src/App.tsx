@@ -112,15 +112,18 @@ function App() {
       />
       <PlayerTable>
         {[...playerRoster].map(([key, value]) => {
-          console.log(value, key);
-          <PlayerTableRow
-            positions={positions}
-            setPositions={setPositions}
-            player={value}
-            key={key}
-            setPlayerRoster={setPlayerRoster}
-            playerRoster={playerRoster}
-          />;
+          console.log(key, value);
+          return (
+            <PlayerTableRow
+              positions={positions}
+              setPositions={setPositions}
+              player={value}
+              playerNumber={key}
+              setPlayerRoster={setPlayerRoster}
+              playerRoster={playerRoster}
+              key={key}
+            />
+          );
         })}
       </PlayerTable>
     </div>
@@ -156,14 +159,14 @@ function PlayerTableRow({
   positions,
   setPositions,
   player,
-  key,
+  playerNumber,
   setPlayerRoster,
   playerRoster,
 }: {
   positions: Array<PlayerPosition>;
   setPositions: Dispatch<SetStateAction<PlayerPosition[]>>;
   player: Player;
-  key: string;
+  playerNumber: string;
   setPlayerRoster: Dispatch<SetStateAction<Map<string, Player>>>;
   playerRoster: Map<string, Player>;
 }) {
@@ -174,7 +177,7 @@ function PlayerTableRow({
   const handlePosChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setPlayerRoster(
       new Map(
-        playerRoster.set(key, {
+        playerRoster.set(playerNumber, {
           ...player!,
           position: event.target.value,
         })
@@ -203,7 +206,7 @@ function PlayerTableRow({
   const handlePlayerNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPlayerRoster(
       new Map(
-        playerRoster.set(key, {
+        playerRoster.set(playerNumber, {
           ...player!,
           name: event.target.value,
         })
@@ -212,7 +215,7 @@ function PlayerTableRow({
   };
   return (
     <tr>
-      <td>{key}</td>
+      <td>{playerNumber}</td>
       <td>
         <input type="text" onChange={handlePlayerNameChange} />
       </td>
@@ -226,6 +229,11 @@ function PlayerTableRow({
                 </option>
               );
             }
+            return (
+              <option key={playerPos.name} value={playerPos.name} disabled>
+                {playerPos.name}
+              </option>
+            );
           })}
         </select>
       </td>
